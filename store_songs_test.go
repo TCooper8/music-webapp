@@ -17,7 +17,7 @@ func addSong(song *Song) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"addSong",
+		TEST_SERVER_END_POINT+"addSong",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -41,7 +41,7 @@ func deleteSong(id string) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"deleteSong",
+		TEST_SERVER_END_POINT+"deleteSong",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -65,7 +65,7 @@ func getSong(id string) (*Song, error) {
 	}
 
 	resp, err := http.Post(
-		endPoint+"getSong",
+		TEST_SERVER_END_POINT+"getSong",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -100,7 +100,7 @@ func getArtistSongs(artistId string) ([]string, error) {
 	}
 
 	resp, err := http.Post(
-		endPoint+"getArtistSongs",
+		TEST_SERVER_END_POINT+"getArtistSongs",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -135,7 +135,7 @@ func updateSong(song *Song) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"updateSong",
+		TEST_SERVER_END_POINT+"updateSong",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)

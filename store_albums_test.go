@@ -17,7 +17,7 @@ func addAlbum(album *Album) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"addAlbum",
+		TEST_SERVER_END_POINT+"addAlbum",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -41,7 +41,7 @@ func deleteAlbum(id string) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"deleteAlbum",
+		TEST_SERVER_END_POINT+"deleteAlbum",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -65,7 +65,7 @@ func getAlbum(id string) (*Album, error) {
 	}
 
 	resp, err := http.Post(
-		endPoint+"getAlbum",
+		TEST_SERVER_END_POINT+"getAlbum",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -100,7 +100,7 @@ func getArtistAlbums(artistId string) ([]string, error) {
 	}
 
 	resp, err := http.Post(
-		endPoint+"getArtistAlbums",
+		TEST_SERVER_END_POINT+"getArtistAlbums",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
@@ -135,7 +135,7 @@ func updateAlbum(album *Album) error {
 	}
 
 	resp, err := http.Post(
-		endPoint+"updateAlbum",
+		TEST_SERVER_END_POINT+"updateAlbum",
 		"application/x-www-form-urlencoded",
 		bytes.NewReader(buffer),
 	)
