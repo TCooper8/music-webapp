@@ -1,0 +1,5 @@
+{
+  "httpPort": 3410,
+  "httpHostname": "localhost",
+  "logLevel": "DEBUG"
+}
