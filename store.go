@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
@@ -17,8 +18,10 @@ type State struct {
 }
 
 func NewState() (*State, error) {
+	config := GetConfig()
+
 	state := &State{
-		log:     NewLogger("store", LOG_WARN),
+		log:     NewLogger("store", config.GetLogLevel()),
 		albums:  NewAlbums(),
 		artists: NewArtists(),
 		songs:   NewSongs(),
@@ -534,7 +537,7 @@ func (state *State) updateSongHandle(resp http.ResponseWriter, req *http.Request
 }
 
 func (state *State) notFoundHandle(resp http.ResponseWriter, req *http.Request) {
-	state.log.Info("Got invalid request url of %s", req.RequestURI)
+	state.log.Warn("Got invalid request url of %s", req.RequestURI)
 	resp.WriteHeader(http.StatusNotFound)
 }
 
@@ -553,52 +556,64 @@ func (ln tcpListener) Accept() (c net.Conn, err error) {
 	return tc, nil
 }
 
-func init() {
+func NewStore(errChan chan<- error) {
 	state, err := NewState()
 	if err != nil {
 		panic(err)
 	}
 
-	http.HandleFunc("/addAlbum", state.addAlbumHandle)
-	http.HandleFunc("/addArtist", state.addArtistHandle)
-	http.HandleFunc("/addSong", state.addSongHandle)
+	serveMux := http.NewServeMux()
 
-	http.HandleFunc("/deleteAlbum", state.deleteAlbumHandle)
-	http.HandleFunc("/deleteArtist", state.deleteArtistHandle)
-	http.HandleFunc("/deleteSong", state.deleteSongHandle)
+	serveMux.HandleFunc("/addAlbum", state.addAlbumHandle)
+	serveMux.HandleFunc("/addArtist", state.addArtistHandle)
+	serveMux.HandleFunc("/addSong", state.addSongHandle)
 
-	http.HandleFunc("/getAlbum", state.getAlbumHandle)
-	http.HandleFunc("/getArtist", state.getArtistHandle)
-	http.HandleFunc("/getSong", state.getSongHandle)
+	serveMux.HandleFunc("/deleteAlbum", state.deleteAlbumHandle)
+	serveMux.HandleFunc("/deleteArtist", state.deleteArtistHandle)
+	serveMux.HandleFunc("/deleteSong", state.deleteSongHandle)
 
-	http.HandleFunc("/getAlbumSongs", state.getAlbumSongsHandle)
-	http.HandleFunc("/getArtistAlbums", state.getArtistAlbumsHandle)
-	http.HandleFunc("/getArtistSongs", state.getArtistSongsHandle)
+	serveMux.HandleFunc("/getAlbum", state.getAlbumHandle)
+	serveMux.HandleFunc("/getArtist", state.getArtistHandle)
+	serveMux.HandleFunc("/getSong", state.getSongHandle)
 
-	http.HandleFunc("/updateAlbum", state.updateAlbumHandle)
-	http.HandleFunc("/updateArtist", state.updateArtistHandle)
-	http.HandleFunc("/updateSong", state.updateSongHandle)
+	serveMux.HandleFunc("/getAlbumSongs", state.getAlbumSongsHandle)
+	serveMux.HandleFunc("/getArtistAlbums", state.getArtistAlbumsHandle)
+	serveMux.HandleFunc("/getArtistSongs", state.getArtistSongsHandle)
 
-	http.HandleFunc("/", state.notFoundHandle)
+	serveMux.HandleFunc("/updateAlbum", state.updateAlbumHandle)
+	serveMux.HandleFunc("/updateArtist", state.updateArtistHandle)
+	serveMux.HandleFunc("/updateSong", state.updateSongHandle)
+
+	serveMux.HandleFunc("/", state.notFoundHandle)
 
 	state.log.Info("Starting http server")
 
-	server := &http.Server{}
+	server := &http.Server{
+		Handler: serveMux,
+	}
 
-	listener, err := net.Listen("tcp", "localhost:3410")
+	config := GetConfig()
+	hostAddr := fmt.Sprintf(":%d", config.GetHttpPort())
+
+	listener, err := net.Listen("tcp", hostAddr)
 	if err != nil {
 		panic(err)
 	}
 
-	state.log.Info("Started listening.")
+	state.log.Info("Started listening on %s", hostAddr)
 
 	go func() {
 		err := server.Serve(tcpListener{listener.(*net.TCPListener)})
 		if err != nil {
-			panic(err)
+			if errChan != nil {
+				errChan <- err
+			} else {
+				panic(err)
+			}
 		}
 	}()
 }
 
-func main() {
+func init() {
+	NewStore(nil)
 }
