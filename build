@@ -1,2 +1,2 @@
 docker build -t music-webapp ./ &&
-  docker run -p 3410:8080 -d music-webapp
+  docker run -p 8080:8080 -d music-webapp
