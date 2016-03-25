@@ -93,6 +93,36 @@ func getAlbum(id string) (*Album, error) {
 	return album, nil
 }
 
+func getAllAlbums() ([]string, error) {
+	resp, err := http.Post(
+		TEST_SERVER_END_POINT+"getAllAlbums",
+		"application/x-www-form-urlencoded",
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Expected 200 OK but got " + resp.Status)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	albums := make([]string, 0)
+	err = json.Unmarshal(body, &albums)
+	if err != nil {
+		return nil, err
+	}
+
+	return albums, nil
+}
+
 func getArtistAlbums(artistId string) ([]string, error) {
 	buffer, err := json.Marshal(artistId)
 	if err != nil {
@@ -238,6 +268,35 @@ func TestGetAlbum(test *testing.T) {
 	}
 
 	if !matches {
+		test.FailNow()
+	}
+}
+
+func TestGetAllAlbums(test *testing.T) {
+	albumI := Album{
+		Id:       "testGetAllAlbumsId",
+		Name:     "testGetAllAlbums",
+		Genre:    "testGetAllAlbumsGenre",
+		Time:     "testGetAllAlbumsTime",
+		Price:    "testGetAllAlbumsPrice",
+		AlbumId:  "testGetAllAlbumsAlbumId",
+		ArtistId: "testGetAllAlbumsArtistId",
+	}
+
+	err := addAlbum(&albumI)
+	if err != nil {
+		test.Errorf("Unable to add album %#v: %s", albumI, err)
+		test.FailNow()
+	}
+
+	albums, err := getAllAlbums()
+	if err != nil {
+		test.Errorf("Unable to get album %s: %s", albumI.Id, err)
+		test.FailNow()
+	}
+
+	if len(albums) <= 0 {
+		test.Errorf("GetAllAlbums did not return at least one album.")
 		test.FailNow()
 	}
 }
