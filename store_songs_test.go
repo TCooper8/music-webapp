@@ -93,6 +93,41 @@ func getSong(id string) (*Song, error) {
 	return song, nil
 }
 
+func getAlbumSongs(albumId string) ([]string, error) {
+	buffer, err := json.Marshal(albumId)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(
+		TEST_SERVER_END_POINT+"getAlbumSongs",
+		"application/x-www-form-urlencoded",
+		bytes.NewReader(buffer),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Expected 200 OK but got " + resp.Status)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	songs := make([]string, 0)
+	err = json.Unmarshal(body, &songs)
+	if err != nil {
+		return nil, err
+	}
+
+	return songs, nil
+}
+
 func getArtistSongs(artistId string) ([]string, error) {
 	buffer, err := json.Marshal(artistId)
 	if err != nil {
@@ -247,6 +282,64 @@ func TestGetSong(test *testing.T) {
 	}
 
 	if !matches {
+		test.FailNow()
+	}
+}
+
+func TestGetAlbumSongs(test *testing.T) {
+	song0 := Song{
+		Id:       "testGetArtistSongsId0",
+		Name:     "testGetArtistSongs0",
+		Genre:    "testGetArtistSongsGenre0",
+		Time:     "testGetArtistSongsTime0",
+		Price:    "testGetArtistSongsPrice0",
+		AlbumId:  "testGetArtistSongsAlbumId",
+		ArtistId: "testGetArtistSongsArtistId",
+	}
+	song1 := Song{
+		Id:       "testGetArtistSongsId1",
+		Name:     "testGetArtistSongs1",
+		Genre:    "testGetArtistSongsGenre1",
+		Time:     "testGetArtistSongsTime1",
+		Price:    "testGetArtistSongsPrice1",
+		AlbumId:  "testGetArtistSongsAlbumId",
+		ArtistId: "testGetArtistSongsArtistId",
+	}
+
+	// Add the songs first.
+	err := addSong(&song0)
+	if err != nil {
+		test.Errorf("Unable to add song %#v: %s", song0, err)
+		test.FailNow()
+	}
+	err = addSong(&song1)
+	if err != nil {
+		test.Errorf("Unable to add song %#v: %s", song1, err)
+		test.FailNow()
+	}
+
+	// Now list the songs.
+	songs, err := getAlbumSongs(song0.ArtistId)
+	if err != nil {
+		test.Errorf("Unable to get album songs %s", song0.ArtistId)
+		test.FailNow()
+	}
+
+	expectedSongs := []string{song0.Id, song1.Id}
+
+	sort.Strings(expectedSongs)
+	sort.Strings(songs)
+
+	eq := true
+	for i := range songs {
+		if expectedSongs[i] != songs[i] {
+			eq = false
+			break
+		}
+	}
+
+	if !eq {
+		test.Errorf("Songs did not match what was stored. %#v != %#v", songs, expectedSongs)
 		test.FailNow()
 	}
 }
