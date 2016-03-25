@@ -288,22 +288,22 @@ func TestGetSong(test *testing.T) {
 
 func TestGetAlbumSongs(test *testing.T) {
 	song0 := Song{
-		Id:       "testGetArtistSongsId0",
-		Name:     "testGetArtistSongs0",
-		Genre:    "testGetArtistSongsGenre0",
-		Time:     "testGetArtistSongsTime0",
-		Price:    "testGetArtistSongsPrice0",
-		AlbumId:  "testGetArtistSongsAlbumId",
-		ArtistId: "testGetArtistSongsArtistId",
+		Id:       "testGetAlbumSongsId0",
+		Name:     "testGetAlbumSongs0",
+		Genre:    "testGetAlbumSongsGenre0",
+		Time:     "testGetAlbumSongsTime0",
+		Price:    "testGetAlbumSongsPrice0",
+		AlbumId:  "testGetAlbumSongsAlbumId",
+		ArtistId: "testGetAlbumSongsArtistId",
 	}
 	song1 := Song{
-		Id:       "testGetArtistSongsId1",
-		Name:     "testGetArtistSongs1",
-		Genre:    "testGetArtistSongsGenre1",
-		Time:     "testGetArtistSongsTime1",
-		Price:    "testGetArtistSongsPrice1",
-		AlbumId:  "testGetArtistSongsAlbumId",
-		ArtistId: "testGetArtistSongsArtistId",
+		Id:       "testGetAlbumSongsId1",
+		Name:     "testGetAlbumSongs1",
+		Genre:    "testGetAlbumSongsGenre1",
+		Time:     "testGetAlbumSongsTime1",
+		Price:    "testGetAlbumSongsPrice1",
+		AlbumId:  "testGetAlbumSongsAlbumId",
+		ArtistId: "testGetAlbumSongsArtistId",
 	}
 
 	// Add the songs first.
@@ -319,7 +319,7 @@ func TestGetAlbumSongs(test *testing.T) {
 	}
 
 	// Now list the songs.
-	songs, err := getAlbumSongs(song0.ArtistId)
+	songs, err := getAlbumSongs(song0.AlbumId)
 	if err != nil {
 		test.Errorf("Unable to get album songs %s", song0.ArtistId)
 		test.FailNow()
