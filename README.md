@@ -3,7 +3,8 @@
 Requires Docker (tested on 1.9.1)
 You may need sudo permissions if on Ubuntu.
 
-> clone <this repo>
+> clone (this repo)
+
 > ./build
 
 All methods takes HTTP POST requests with JSON data as the arguments.
