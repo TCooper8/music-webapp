@@ -7,9 +7,13 @@ You may need sudo permissions if on Ubuntu.
 > ./build
 
 All methods takes HTTP POST requests with JSON data as the arguments.
+
 See below for specifics on the API.
+
 Example:
+
   curl -X POST http://localhost:8080/addArtist -d '{"id": "1", "name":"bob","birthdate":"1234"}'
+
   curl -X POST http://localhost:8080/getArtist -d '"1"'
 
 ## Structs
