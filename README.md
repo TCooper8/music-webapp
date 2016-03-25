@@ -6,6 +6,12 @@ You may need sudo permissions if on Ubuntu.
 > clone <this repo>
 > ./build
 
+All methods takes HTTP POST requests with JSON data as the arguments.
+See below for specifics on the API.
+Example:
+  curl -X POST http://localhost:8080/addArtist -d '{"id": "1", "name":"bob","birthdate":"1234"}'
+  curl -X POST http://localhost:8080/getArtist -d '"1"'
+
 ## Structs
 
 Note: This reflects how the JSON data needs to be structured, not strictly what is stored in memory.
