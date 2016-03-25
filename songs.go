@@ -224,6 +224,9 @@ func (state *Songs) GetArtistSongs(artistId string) ([]string, error) {
 }
 
 func (state *Songs) GetAll() ([]string, error) {
+	state.Lock()
+	defer state.Unlock()
+
 	songIds := make([]string, len(state.songs))
 
 	i := -1
