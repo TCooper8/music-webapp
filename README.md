@@ -1,3 +1,11 @@
+## Installation
+
+Requires Docker (tested on 1.9.1)
+You may need sudo permissions if on Ubuntu.
+
+> clone <this repo>
+> ./build
+
 ## Structs
 
 Note: This reflects how the JSON data needs to be structured, not strictly what is stored in memory.
