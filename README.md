@@ -70,6 +70,13 @@ Takes a string of the Album's id.
 
 Returns Album.
 
+#### /getAllAlbums: () -> []string
+This method will look up all albumgs and return the list of song ids.
+
+Takes no data.
+
+Returns array of Album ids as []string
+
 #### /getArtistAlbums: string -> []string
 This method will look up an Artist by it's 'id' and return the list of Albums associated with that Artist.
 
@@ -102,6 +109,13 @@ This method will delete an existing Artist.
 Takes a string of the Artist's id.
 
 Returns no data.
+
+#### /getAllArtists: () -> []string
+This method will look up all artistgs and return the list of song ids.
+
+Takes no data.
+
+Returns array of Artist ids as []string
 
 #### /getArtist: string -> Artist
 This method will get an existing Artist.
@@ -148,6 +162,13 @@ Returns Song.
 This method will look up an Album by it's 'id' and return the list of Songs associated with that Album.
 
 Takes a string of the Album's id.
+
+Returns array of Song ids as []string
+
+#### /getAllSongs: () -> []string
+This method will look up all songs and return the list of song ids.
+
+Takes no data.
 
 Returns array of Song ids as []string
 

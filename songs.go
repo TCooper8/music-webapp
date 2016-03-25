@@ -223,6 +223,21 @@ func (state *Songs) GetArtistSongs(artistId string) ([]string, error) {
 	return songs, nil
 }
 
+func (state *Songs) GetAll() ([]string, error) {
+	state.Lock()
+	defer state.Unlock()
+
+	songIds := make([]string, len(state.songs))
+
+	i := -1
+	for _, song := range state.songs {
+		i++
+		songIds[i] = song.Id
+	}
+
+	return songIds, nil
+}
+
 func (state *Songs) Update(song *Song) error {
 	state.Lock()
 	defer state.Unlock()

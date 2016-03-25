@@ -140,6 +140,21 @@ func (state *Albums) Get(id string) (*Album, error) {
 	return album, nil
 }
 
+func (state *Albums) GetAll() ([]string, error) {
+	state.Lock()
+	defer state.Unlock()
+
+	albumIds := make([]string, len(state.albums))
+
+	i := -1
+	for _, album := range state.albums {
+		i++
+		albumIds[i] = album.Id
+	}
+
+	return albumIds, nil
+}
+
 func (state *Albums) GetArtistAlbums(artistId string) ([]string, error) {
 	state.Lock()
 	defer state.Unlock()

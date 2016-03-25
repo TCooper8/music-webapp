@@ -58,6 +58,36 @@ func deleteSong(id string) error {
 	return nil
 }
 
+func getAllSongs() ([]string, error) {
+	resp, err := http.Post(
+		TEST_SERVER_END_POINT+"getAllSongs",
+		"application/x-www-form-urlencoded",
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Expected 200 OK but got " + resp.Status)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	songs := make([]string, 0)
+	err = json.Unmarshal(body, &songs)
+	if err != nil {
+		return nil, err
+	}
+
+	return songs, nil
+}
+
 func getSong(id string) (*Song, error) {
 	buffer, err := json.Marshal(id)
 	if err != nil {
@@ -282,6 +312,35 @@ func TestGetSong(test *testing.T) {
 	}
 
 	if !matches {
+		test.FailNow()
+	}
+}
+
+func TestGetAllSongs(test *testing.T) {
+	songI := Song{
+		Id:       "testGetAllSongsId",
+		Name:     "testGetAllSongs",
+		Genre:    "testGetAllSongsGenre",
+		Time:     "testGetAllSongsTime",
+		Price:    "testGetAllSongsPrice",
+		AlbumId:  "testGetAllSongsAlbumId",
+		ArtistId: "testGetAllSongsArtistId",
+	}
+
+	err := addSong(&songI)
+	if err != nil {
+		test.Errorf("Unable to add song %#v: %s", songI, err)
+		test.FailNow()
+	}
+
+	songs, err := getAllSongs()
+	if err != nil {
+		test.Errorf("Unable to get song %s: %s", songI.Id, err)
+		test.FailNow()
+	}
+
+	if len(songs) <= 0 {
+		test.Errorf("GetAllSongs did not return at least one song.")
 		test.FailNow()
 	}
 }

@@ -88,3 +88,18 @@ func (state *Artists) Get(id string) (*Artist, error) {
 
 	return artist, nil
 }
+
+func (state *Artists) GetAll() ([]string, error) {
+	state.Lock()
+	defer state.Unlock()
+
+	artistIds := make([]string, len(state.artists))
+
+	i := -1
+	for _, artist := range state.artists {
+		i++
+		artistIds[i] = artist.Id
+	}
+
+	return artistIds, nil
+}
