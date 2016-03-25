@@ -151,6 +151,13 @@ Takes a string of the Album's id.
 
 Returns array of Song ids as []string
 
+#### /getAllSongs: () -> []string
+This method will look up all songs and return the list of song ids.
+
+Takes no data.
+
+Returns array of Song ids as []string
+
 #### /getArtistSongs: string -> []string
 This method will look up an Artist by it's 'id' and return the list of Songs associated with that Artist.
 
