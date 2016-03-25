@@ -276,10 +276,7 @@ func TestGetAllAlbums(test *testing.T) {
 	albumI := Album{
 		Id:       "testGetAllAlbumsId",
 		Name:     "testGetAllAlbums",
-		Genre:    "testGetAllAlbumsGenre",
-		Time:     "testGetAllAlbumsTime",
 		Price:    "testGetAllAlbumsPrice",
-		AlbumId:  "testGetAllAlbumsAlbumId",
 		ArtistId: "testGetAllAlbumsArtistId",
 	}
 
