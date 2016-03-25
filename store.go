@@ -30,6 +30,9 @@ func NewState() (*State, error) {
 	return state, nil
 }
 
+/*
+Writes an error response to the http.ResponseWriter
+*/
 func (state *State) writeRespError(resp http.ResponseWriter, errResp string) {
 	// Set the header.
 	resp.Header().Set(
@@ -44,6 +47,10 @@ func (state *State) writeRespError(resp http.ResponseWriter, errResp string) {
 	}
 }
 
+/*
+http end point for adding a new album.
+val addAlbum: Album -> unit
+*/
 func (state *State) addAlbumHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for addAlbum")
 
@@ -77,6 +84,10 @@ func (state *State) addAlbumHandle(resp http.ResponseWriter, req *http.Request) 
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+http end point for adding a new artist
+val addArtist: Artist -> unit
+*/
 func (state *State) addArtistHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for addArtist")
 
@@ -110,6 +121,10 @@ func (state *State) addArtistHandle(resp http.ResponseWriter, req *http.Request)
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+http end point for adding a new song
+val addSong: Song -> unit
+*/
 func (state *State) addSongHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for addSong")
 
@@ -143,6 +158,10 @@ func (state *State) addSongHandle(resp http.ResponseWriter, req *http.Request) {
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+http end point for deleting an album
+val deleteAlbum: string -> unit
+*/
 func (state *State) deleteAlbumHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for deleteAlbum")
 
@@ -174,6 +193,9 @@ func (state *State) deleteAlbumHandle(resp http.ResponseWriter, req *http.Reques
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+val deleteArtist: string -> unit
+*/
 func (state *State) deleteArtistHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for deleteArtist")
 
@@ -205,6 +227,9 @@ func (state *State) deleteArtistHandle(resp http.ResponseWriter, req *http.Reque
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+val deleteSong: string -> unit
+*/
 func (state *State) deleteSongHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for deleteSong")
 
@@ -236,6 +261,9 @@ func (state *State) deleteSongHandle(resp http.ResponseWriter, req *http.Request
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+val getAlbum: string -> Album
+*/
 func (state *State) getAlbumHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getAlbum")
 
@@ -276,6 +304,9 @@ func (state *State) getAlbumHandle(resp http.ResponseWriter, req *http.Request) 
 	}
 }
 
+/*
+val getArtist: string -> Artist
+*/
 func (state *State) getArtistHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getArtist")
 
@@ -310,6 +341,9 @@ func (state *State) getArtistHandle(resp http.ResponseWriter, req *http.Request)
 	}
 }
 
+/*
+val getSong: string -> Song
+*/
 func (state *State) getSongHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getSong")
 
@@ -344,6 +378,11 @@ func (state *State) getSongHandle(resp http.ResponseWriter, req *http.Request) {
 	}
 }
 
+/*
+val getArtistAlbums: string -> []string
+Takes the id of the artist.
+Returns the array of album ids.
+*/
 func (state *State) getArtistAlbumsHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getArtistAlbums")
 
@@ -378,6 +417,11 @@ func (state *State) getArtistAlbumsHandle(resp http.ResponseWriter, req *http.Re
 	}
 }
 
+/*
+val getAlbumSongs: string -> []string
+Takes the id of the album.
+Returns the array of song ids.
+*/
 func (state *State) getAlbumSongsHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getAlbumSongs")
 
@@ -412,6 +456,11 @@ func (state *State) getAlbumSongsHandle(resp http.ResponseWriter, req *http.Requ
 	}
 }
 
+/*
+val getArtistSongs: string -> []string
+Takes the id of the artist.
+Returns the array of song ids.
+*/
 func (state *State) getArtistSongsHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for getArtistSongs")
 
@@ -446,6 +495,9 @@ func (state *State) getArtistSongsHandle(resp http.ResponseWriter, req *http.Req
 	}
 }
 
+/*
+val updateAlbum: Album -> unit
+*/
 func (state *State) updateAlbumHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for updateAlbum")
 
@@ -476,6 +528,9 @@ func (state *State) updateAlbumHandle(resp http.ResponseWriter, req *http.Reques
 	resp.WriteHeader(http.StatusOK)
 }
 
+/*
+val updateArtist: Artist -> unit
+*/
 func (state *State) updateArtistHandle(resp http.ResponseWriter, req *http.Request) {
 	state.log.Info("Got request for updateArtist")
 
