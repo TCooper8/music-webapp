@@ -110,6 +110,13 @@ Takes a string of the Artist's id.
 
 Returns no data.
 
+#### /getAllArtists: () -> []string
+This method will look up all artistgs and return the list of song ids.
+
+Takes no data.
+
+Returns array of Artist ids as []string
+
 #### /getArtist: string -> Artist
 This method will get an existing Artist.
 

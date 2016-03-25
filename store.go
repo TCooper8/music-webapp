@@ -423,6 +423,28 @@ func (state *State) getAllAlbumsHandle(resp http.ResponseWriter, req *http.Reque
 }
 
 /*
+val getAllArtists: () -> []string
+*/
+func (state *State) getAllArtistsHandle(resp http.ResponseWriter, req *http.Request) {
+	state.log.Info("Got request for getAllArtists")
+
+	var err error
+
+	artists, err := state.artists.GetAll()
+	if err != nil {
+		state.log.Warn("Error getting all artists for %s: %s", req.RemoteAddr, err)
+		state.writeRespError(resp, "Error retrieving artists")
+		return
+	}
+
+	resp.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(resp).Encode(artists)
+	if err != nil {
+		state.log.Warn("Error writeing getAllArtists response %#v to %s: %s", artists, req.RemoteAddr, err)
+	}
+}
+
+/*
 val getArtistAlbums: string -> []string
 Takes the id of the artist.
 Returns the array of album ids.
@@ -677,6 +699,7 @@ func NewStore(errChan chan<- error) {
 
 	serveMux.HandleFunc("/getAllSongs", state.getAllSongsHandle)
 	serveMux.HandleFunc("/getAllAlbums", state.getAllAlbumsHandle)
+	serveMux.HandleFunc("/getAllArtists", state.getAllArtistsHandle)
 
 	serveMux.HandleFunc("/getAlbumSongs", state.getAlbumSongsHandle)
 	serveMux.HandleFunc("/getArtistAlbums", state.getArtistAlbumsHandle)

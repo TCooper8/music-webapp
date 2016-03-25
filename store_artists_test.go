@@ -92,6 +92,36 @@ func getArtist(id string) (*Artist, error) {
 	return artist, nil
 }
 
+func getAllArtists() ([]string, error) {
+	resp, err := http.Post(
+		TEST_SERVER_END_POINT+"getAllArtists",
+		"application/x-www-form-urlencoded",
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, errors.New("Expected 200 OK but got " + resp.Status)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	artists := make([]string, 0)
+	err = json.Unmarshal(body, &artists)
+	if err != nil {
+		return nil, err
+	}
+
+	return artists, nil
+}
+
 func updateArtist(artist *Artist) error {
 	buffer, err := json.Marshal(artist)
 	if err != nil {
@@ -195,6 +225,31 @@ func TestGetArtist(test *testing.T) {
 	}
 
 	if !matches {
+		test.FailNow()
+	}
+}
+
+func TestGetAllArtists(test *testing.T) {
+	artistI := Artist{
+		Id:        "testGetAllArtistsId",
+		Name:      "testGetAllArtists",
+		Birthdate: "testGetAllArtistsBirthdate",
+	}
+
+	err := AddArtist(&artistI)
+	if err != nil {
+		test.Errorf("Unable to add artist %#v: %s", artistI, err)
+		test.FailNow()
+	}
+
+	artists, err := getAllArtists()
+	if err != nil {
+		test.Errorf("Unable to get artist %s: %s", artistI.Id, err)
+		test.FailNow()
+	}
+
+	if len(artists) <= 0 {
+		test.Errorf("GetAllArtists did not return at least one artist.")
 		test.FailNow()
 	}
 }
